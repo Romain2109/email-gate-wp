@@ -93,8 +93,8 @@ function email_gate_admin_page() {
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
-                        <th>Sélectionner</th>
-                        <th>ID</th>
+                        <th style="width: 10%;">Sélectionner</th>
+                        <th style="width: 10%;">ID</th>
                         <th>Email</th>
                     </tr>
                 </thead>
@@ -124,11 +124,11 @@ function email_gate_admin_page() {
         <br>
         <h3>Importer une liste d'e-mails depuis un fichier CSV</h3>
         <form method="post" enctype="multipart/form-data">
-            <input type="file" name="csv_file" accept=".csv" required>
-            <input type="submit" name="import_csv" value="Importer" class="button-primary">
-        </form>
-    </div>
-    <?php
+    <input type="file" name="csv_file" accept=".csv" required>
+    <input type="submit" name="import_csv" value="Importer" class="button-primary">
+</form>
+</div>
+<?php
 }
 
 // Enregistrer la page d'administration avec le nouveau pictogramme
@@ -143,3 +143,4 @@ function email_gate_add_admin_page() {
     );
 }
 add_action('admin_menu', 'email_gate_add_admin_page');
+?>
