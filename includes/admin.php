@@ -181,19 +181,40 @@ function email_gate_settings_init() {
     register_setting('email_gate_form_options_group', 'title_form');
     register_setting('email_gate_form_options_group', 'bg_btn_form');
     register_setting('email_gate_form_options_group', 'bg_btn_hover_form');
+    register_setting('email_gate_form_options_group', 'text_btn_hover_form');
+    register_setting('email_gate_form_options_group', 'text_btn_form');
     register_setting('email_gate_form_options_group', 'border_radius_form');
     register_setting('email_gate_form_options_group', 'text_color_input_form');
     register_setting('email_gate_form_options_group', 'text_color_title_form');
+    register_setting('email_gate_form_options_group', 'text_size_title_form');
     register_setting('email_gate_form_options_group', 'bg_color_input_form');
     register_setting('email_gate_form_options_group', 'bg_color_input_focus_form');
-
+    register_setting('email_gate_form_options_group', 'color1_gradient_form');
+    register_setting('email_gate_form_options_group', 'color2_gradient_form');
+    
     add_settings_section(
         'email_gate_form_settings_section',
         'Paramètres de Style',
         'email_gate_form_settings_section_callback',
         'email_gate_form_settings'
     );
+    
+    add_settings_field(
+        'color1_gradient_form',
+        'Couleur 1 du dégradé du fond',
+        'color1_gradient_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
 
+    add_settings_field(
+        'color2_gradient_form',
+        'Couleur 2 du dégradé du fond',
+        'color2_gradient_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+    
     add_settings_field(
         'title_form',
         'Titre du formulaire',
@@ -214,6 +235,14 @@ function email_gate_settings_init() {
         'bg_btn_hover_form',
         'Couleur de fond du bouton au survol',
         'bg_btn_hover_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'text_btn_hover_form',
+        'Couleur du texte du bouton au survol',
+        'text_btn_hover_form_render',
         'email_gate_form_settings',
         'email_gate_form_settings_section'
     );
@@ -243,6 +272,14 @@ function email_gate_settings_init() {
     );
 
     add_settings_field(
+        'text_size_title_form',
+        'Couleur du titre',
+        'text_size_title_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
         'bg_color_input_form',
         'Couleur du fond du champ',
         'bg_color_input_form_render',
@@ -257,12 +294,31 @@ function email_gate_settings_init() {
         'email_gate_form_settings',
         'email_gate_form_settings_section'
     );
+
+    add_settings_field(
+        'text_btn_form',
+        'Couleur du texte du bouton',
+        'text_btn_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
 }
 add_action('admin_init', 'email_gate_settings_init');
 
 // Callbacks pour les sections et champs
 function email_gate_form_settings_section_callback() {
 echo 'Modifiez les styles de votre formulaire ici.';
+}
+
+function color1_gradient_form_render() {
+    $value = get_option('color1_gradient_form', '#49d49d');
+    echo '<input type="color" name="color1_gradient_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function color2_gradient_form_render() {
+    $value = get_option('color2_gradient_form', '#a2c7e5');
+    echo '<input type="color" name="color2_gradient_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
 }
 
 function title_form_render() {
@@ -275,9 +331,19 @@ function bg_btn_form_render() {
     echo '<input type="color" name="bg_btn_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
 }
 
+function text_btn_form_render() {
+    $value = get_option('text_btn_form', '#ffffff');
+    echo '<input type="color" name="text_btn_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
 function bg_btn_hover_form_render() {
     $value = get_option('bg_btn_hover_form', '#a09486');
     echo '<input type="color" name="bg_btn_hover_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function text_btn_hover_form_render() {
+    $value = get_option('text_btn_hover_form', '#000000');
+    echo '<input type="color" name="text_btn_hover_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
 }
 
 function border_radius_form_render() {
@@ -294,6 +360,11 @@ function text_color_title_form_render() {
     $value = get_option('text_color_title_form', '#ffffff');
     echo '<input type="color" name="text_color_title_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
 }
+
+function text_size_title_form_render() {
+    $value = get_option('text_size_title_form', '14px');
+        echo '<input type="text" name="text_size_title_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+    }
 
 function bg_color_input_form_render() {
     $value = get_option('bg_color_input_form', '#ffffff');

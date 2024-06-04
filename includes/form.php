@@ -16,14 +16,20 @@ if (!function_exists('email_gate_form')) {
         }
 
         // Récupérer les options CSS enregistrées
+        $color1_gradient_form = get_option('color1_gradient_form', '#49d49d');
+        $color2_gradient_form = get_option('color2_gradient_form', '#a2c7e5');
         $title_form = get_option('title_form', 'Veuillez entrer votre adresse email');
         $bg_btn_form = get_option('bg_btn_form', '#aba194');
         $bg_btn_hover_form = get_option('bg_btn_hover_form', '#a09486');
+        $text_btn_hover_form = get_option('text_btn_hover_form', '#000000');
         $border_radius_form = get_option('border_radius_form', '6px');
         $text_color_input_form = get_option('text_color_input_form', '#000000');
         $text_color_title_form = get_option('text_color_title_form', '#ffffff');
+        $text_size_title_form = get_option('text_size_title_form', '14px');
         $bg_color_input_form = get_option('bg_color_input_form', '#ffffff');
         $bg_color_input_focus_form = get_option('bg_color_input_focus_form', '#f7f7f7');
+        $text_btn_form = get_option('text_btn_form', '#ffffff');
+
 
         // Afficher le formulaire d'inscription avec CSS inclus
         echo '
@@ -39,7 +45,7 @@ if (!function_exists('email_gate_form')) {
             background-size: 200% 100% !important;
             animation: move 10s ease infinite;
             transform: translate3d(0, 0, 0);
-            background: linear-gradient(45deg, #49d49d 10%, #a2c7e5 90%);
+            background: linear-gradient(45deg, ' . $color1_gradient_form . ' 10%, ' . $color2_gradient_form . ' 90%);
             height: 100vh;
        }
         .user {
@@ -54,7 +60,8 @@ if (!function_exists('email_gate_form')) {
             animation: arrive 500ms ease-in-out 0.7s forwards;
        }
         .user__title {
-            font-size: 14px;
+            font-size: ' . $text_size_title_form . ';
+            margin-top : 20px;
             margin-bottom: -10px;
             font-weight: 500;
             color: ' . $text_color_title_form . ';
@@ -98,12 +105,13 @@ if (!function_exists('email_gate_form')) {
             -webkit-appearance: none;
             outline: 0;
             border: 0;
-            color: white;
+            color: ' . $text_btn_form . ';
             background: ' . $bg_btn_form . ';
             transition: 0.3s;
        }
         .btn:hover {
             background: ' . $bg_btn_hover_form . ';
+            color: ' . $text_btn_hover_form . ';
        }
         @keyframes NO {
             from, to {
