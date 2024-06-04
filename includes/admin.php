@@ -1,9 +1,6 @@
 <?php
 // Fonction pour récupérer la liste des adresses e-mail autorisées avec leurs identifiants
 function get_allowed_emails_with_ids() {
-    // Vous devez implémenter la logique pour récupérer la liste des adresses e-mail autorisées
-    // Par exemple, vous pouvez les récupérer à partir de la base de données
-    // Remplacez ceci par votre logique de récupération des e-mails
     $emails = get_option('allowed_emails', array());
     $emails_with_ids = array();
     foreach ($emails as $key => $email) {
@@ -15,8 +12,8 @@ function get_allowed_emails_with_ids() {
     return $emails_with_ids;
 }
 
-// Fonction pour afficher la page d'administration "Email Gate"
-function email_gate_admin_page() {
+// Fonction pour afficher la page "Email Liste"
+function email_list_admin_page() {
     ?>
     <div class="wrap">
         <h1>Email Gate Settings</h1>
@@ -42,11 +39,10 @@ function email_gate_admin_page() {
         if (isset($_POST['add_email'])) {
             $new_email = sanitize_email($_POST['new_email']);
             if ($new_email) {
-                // Ajouter l'e-mail à la liste
                 $emails = get_option('allowed_emails', array());
-                $last_key = max(array_keys($emails)); // Récupérer la clé la plus élevée actuelle
-                $new_id = $last_key + 1; // Nouvel identifiant = clé la plus élevée + 1
-                $emails[$new_id] = $new_email; // Ajouter l'e-mail avec le nouvel identifiant
+                $last_key = !empty($emails) ? max(array_keys($emails)) : 0;
+                $new_id = $last_key + 1;
+                $emails[$new_id] = $new_email;
                 update_option('allowed_emails', $emails);
                 echo '<div class="updated"><p>Email ajouté avec succès!</p></div>';
             } else {
@@ -58,12 +54,10 @@ function email_gate_admin_page() {
         if (isset($_GET['delete_email'])) {
             $delete_email = sanitize_email($_GET['delete_email']);
             if ($delete_email) {
-                // Supprimer l'e-mail de la liste
                 $emails = get_option('allowed_emails', array());
                 $key = array_search($delete_email, $emails);
                 if ($key !== false) {
                     unset($emails[$key]);
-                    // Réorganiser les identifiants pour éviter les "trous"
                     $emails = array_values($emails);
                     update_option('allowed_emails', $emails);
                     echo '<div class="updated"><p>Email supprimé avec succès!</p></div>';
@@ -75,14 +69,12 @@ function email_gate_admin_page() {
         if (isset($_POST['delete_selected'])) {
             $selected_emails = isset($_POST['selected_emails']) ? $_POST['selected_emails'] : array();
             if (!empty($selected_emails)) {
-                // Supprimer les e-mails sélectionnés de la liste
                 $emails = get_option('allowed_emails', array());
                 foreach ($selected_emails as $email_id) {
                     if (isset($emails[$email_id])) {
                         unset($emails[$email_id]);
                     }
                 }
-                // Réorganiser les identifiants pour éviter les "trous"
                 $emails = array_values($emails);
                 update_option('allowed_emails', $emails);
                 echo '<div class="updated"><p>E-mails sélectionnés supprimés avec succès!</p></div>';
@@ -100,7 +92,6 @@ function email_gate_admin_page() {
                 </thead>
                 <tbody>
                     <?php
-                    // Récupérer la liste des e-mails autorisés avec leurs identifiants
                     $emails = get_allowed_emails_with_ids();
                     foreach ($emails as $email) {
                         echo '<tr>';
@@ -124,23 +115,58 @@ function email_gate_admin_page() {
         <br>
         <h3>Importer une liste d'e-mails depuis un fichier CSV</h3>
         <form method="post" enctype="multipart/form-data">
-    <input type="file" name="csv_file" accept=".csv" required>
-    <input type="submit" name="import_csv" value="Importer" class="button-primary">
-</form>
-</div>
-<?php
+            <input type="file" name="csv_file" accept=".csv" required>
+            <input type="submit" name="import_csv" value="Importer" class="button-primary">
+        </form>
+    </div>
+    <?php
 }
 
-// Enregistrer la page d'administration avec le nouveau pictogramme
+// Fonction pour afficher la page "Formulaire"
+function form_admin_page() {
+    ?>
+    <div class="wrap">
+        <h1>Formulaire</h1>
+        <p>Ici, vous pouvez gérer les paramètres du formulaire.</p>
+        <!-- Ajoutez ici le contenu et la logique pour la gestion du formulaire -->
+    </div>
+    <?php
+}
+
+// Enregistrer les pages d'administration avec le nouveau pictogramme
 function email_gate_add_admin_page() {
+    // Ajouter un menu parent principal
     add_menu_page(
         'Email Gate',           // Titre de la page
         'Email Gate',           // Texte du menu
         'manage_options',       // Capacité requise pour accéder au menu
         'email-gate',           // Slug de la page
-        'email_gate_admin_page',// Fonction pour afficher la page
-        'dashicons-groups'      // Icône du menu (pictogramme de plusieurs personnes)
+        '',                     // Fonction pour afficher la page (vide pour non cliquable)
+        'dashicons-groups',     // Icône du menu (pictogramme de plusieurs personnes)
+        6                       // Position
     );
+
+    // Ajouter les sous-menus
+    add_submenu_page(
+        'email-gate',           // Slug de la page parente
+        'Email Liste',          // Titre de la sous-page
+        'Email Liste',          // Texte du sous-menu
+        'manage_options',       // Capacité requise pour accéder au sous-menu
+        'email-list',           // Slug de la sous-page
+        'email_list_admin_page' // Fonction pour afficher la sous-page
+    );
+
+    add_submenu_page(
+        'email-gate',           // Slug de la page parente
+        'Formulaire',           // Titre de la sous-page
+        'Formulaire',           // Texte du sous-menu
+        'manage_options',       // Capacité requise pour accéder au sous-menu
+        'form-settings',        // Slug de la sous-page
+        'form_admin_page'       // Fonction pour afficher la sous-page
+    );
+
+    // Supprimer le lien parent principal cliquable
+    remove_submenu_page('email-gate', 'email-gate');
 }
 add_action('admin_menu', 'email_gate_add_admin_page');
 ?>
