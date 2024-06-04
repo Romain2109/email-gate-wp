@@ -15,97 +15,149 @@ if (!function_exists('email_gate_form')) {
             }
         }
 
+        // Récupérer les options CSS enregistrées
+        $title_form = get_option('title_form', 'Veuillez entrer votre adresse email');
+        $bg_btn_form = get_option('bg_btn_form', '#aba194');
+        $bg_btn_hover_form = get_option('bg_btn_hover_form', '#a09486');
+        $border_radius_form = get_option('border_radius_form', '6px');
+        $text_color_input_form = get_option('text_color_input_form', '#000000');
+        $text_color_title_form = get_option('text_color_title_form', '#ffffff');
+        $bg_color_input_form = get_option('bg_color_input_form', '#ffffff');
+        $bg_color_input_focus_form = get_option('bg_color_input_focus_form', '#f7f7f7');
+
         // Afficher le formulaire d'inscription avec CSS inclus
         echo '
         <style>
-            html {
-                height: 100%;
-            }
-            .email-gate-container {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 400px;
-                padding: 40px;
-                transform: translate(-50%, -50%);
-                background: rgba(0,0,0,.5);
-                box-sizing: border-box;
-                box-shadow: 0 15px 25px rgba(0,0,0,.6);
-                border-radius: 10px;
-            }
-            .email-gate-container h2 {
-                margin: 0 0 30px;
-                padding: 0;
-                color: #fff;
-                text-align: center;
-            }
-            .email-gate-container .user-box {
-                position: relative;
-            }
-            .email-gate-container .user-box input {
-                width: 100%;
-                padding: 10px 0;
-                font-size: 16px;
-                color: #fff;
-                margin-bottom: 30px;
-                border: none;
-                border-bottom: 1px solid #fff;
-                outline: none;
-                background: transparent;
-            }
-            .email-gate-container .user-box label {
-                position: absolute;
-                top:0;
-                left: 0;
-                padding: 10px 0;
-                font-size: 16px;
-                color: #fff;
-                pointer-events: none;
-                transition: .5s;
-            }
-            .email-gate-container .user-box input:focus ~ label,
-            .email-gate-container .user-box input:valid ~ label {
-                top: -20px;
-                left: 0;
-                color: #03e9f4;
-                font-size: 12px;
-            }
-            .email-gate-container form a {
-                position: relative;
-                display: inline-block;
-                padding: 10px 20px;
-                color: #03e9f4;
-                font-size: 16px;
-                text-decoration: none;
-                text-transform: uppercase;
-                overflow: hidden;
-                transition: .5s;
-                margin-top: 40px;
-                letter-spacing: 4px;
-            }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+       }
+        body {
+            font-family: "Roboto";
+            font-size: 14px;
+            background-size: 200% 100% !important;
+            animation: move 10s ease infinite;
+            transform: translate3d(0, 0, 0);
+            background: linear-gradient(45deg, #49d49d 10%, #a2c7e5 90%);
+            height: 100vh;
+       }
+        .user {
+            width: 90%;
+            max-width: 340px;
+            margin: 10vh auto;
+       }
+        .user__header {
+            text-align: center;
+            opacity: 0;
+            transform: translate3d(0, 500px, 0);
+            animation: arrive 500ms ease-in-out 0.7s forwards;
+       }
+        .user__title {
+            font-size: 14px;
+            margin-bottom: -10px;
+            font-weight: 500;
+            color: ' . $text_color_title_form . ';
+       }
+        .form {
+            margin-top: 40px;
+            border-radius: ' . $border_radius_form . ';
+            overflow: hidden;
+            opacity: 0;
+            transform: translate3d(0, 500px, 0);
+            animation: arrive 500ms ease-in-out 0.9s forwards;
+       }
+        .form--no {
+            animation: NO 1s ease-in-out;
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+       }
+        .form__input {
+            background: ' . $bg_color_input_form . ';
+            display: block;
+            width: 100%;
+            padding: 20px;
+            font-family: "Roboto";
+            -webkit-appearance: none;
+            border: 0;
+            outline: 0;
+            transition: 0.3s;
+            color: ' . $text_color_input_form . ';
+       }
+        .form__input::placeholder{
+            color: black;
+        }
+        .form__input:focus {
+            background: ' . $bg_color_input_focus_form . ';
+       }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            font-family: "Roboto";
+            -webkit-appearance: none;
+            outline: 0;
+            border: 0;
+            color: white;
+            background: ' . $bg_btn_form . ';
+            transition: 0.3s;
+       }
+        .btn:hover {
+            background: ' . $bg_btn_hover_form . ';
+       }
+        @keyframes NO {
+            from, to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+           }
+            10%, 30%, 50%, 70%, 90% {
+                -webkit-transform: translate3d(-10px, 0, 0);
+                transform: translate3d(-10px, 0, 0);
+           }
+            20%, 40%, 60%, 80% {
+                -webkit-transform: translate3d(10px, 0, 0);
+                transform: translate3d(10px, 0, 0);
+           }
+       }
+        @keyframes arrive {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 50px, 0);
+           }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+           }
+       }
+        @keyframes move {
+            0% {
+                background-position: 0 0;
+           }
+            50% {
+                background-position: 100% 0;
+           }
+            100% {
+                background-position: 0 0;
+           }
+       }
+        
         </style>
         ';
 
-        echo '<div class="email-gate-container">';
-        echo '<h2>Veuillez entrer votre adresse email pour accéder au site</h2>';
-        echo '<form method="post">';
-        echo '<div class="user-box">';
-        echo '<input type="email" name="email_gate_email" placeholder="Votre adresse email" required>';
-        echo '<label>Email</label>';
+        echo '<div class="user">';
+        echo '<header class="user__header">';
+        echo '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3219/logo.svg" alt="" />';
+        echo '<h1 class="user__title">' . $title_form . '</h1>';
+        echo '</header>';
+    
+        echo '<form method="post" class="form">';
+        echo '<div class="form__group">';
+        echo '<input type="email" name="email_gate_email" placeholder="Email" class="form__input" required />';
         echo '<input type="hidden" name="redirect_to" value="' . esc_url($_SERVER['REQUEST_URI']) . '">';
-        echo '<input type="submit" value="Valider">';
+        echo '<input class="btn" type="submit" value="Valider">';
         echo '</div>';
         echo '</form>';
         echo '</div>';
     }
-}
-
-
-if (!function_exists('email_gate_enqueue_styles')) {
-    // Enqueue styles
-    function email_gate_enqueue_styles() {
-        wp_enqueue_style('email-gate-form-style', plugin_dir_url(__FILE__) . 'form.css');
-    }
-    add_action('wp_enqueue_scripts', 'email_gate_enqueue_styles');
 }
 ?>

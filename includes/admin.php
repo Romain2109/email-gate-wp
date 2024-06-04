@@ -122,13 +122,18 @@ function email_list_admin_page() {
     <?php
 }
 
-// Fonction pour afficher la page "Formulaire"
+// Fonction pour afficher la page "Formulaire" avec les options CSS
 function form_admin_page() {
     ?>
     <div class="wrap">
         <h1>Formulaire</h1>
-        <p>Ici, vous pouvez gérer les paramètres du formulaire.</p>
-        <!-- Ajoutez ici le contenu et la logique pour la gestion du formulaire -->
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('email_gate_form_options_group');
+            do_settings_sections('email_gate_form_settings');
+            submit_button();
+            ?>
+        </form>
     </div>
     <?php
 }
@@ -169,4 +174,135 @@ function email_gate_add_admin_page() {
     remove_submenu_page('email-gate', 'email-gate');
 }
 add_action('admin_menu', 'email_gate_add_admin_page');
+
+// Enregistrer les paramètres de style du formulaire
+function email_gate_settings_init() {
+    // Section et champs pour la page des options de formulaire
+    register_setting('email_gate_form_options_group', 'title_form');
+    register_setting('email_gate_form_options_group', 'bg_btn_form');
+    register_setting('email_gate_form_options_group', 'bg_btn_hover_form');
+    register_setting('email_gate_form_options_group', 'border_radius_form');
+    register_setting('email_gate_form_options_group', 'text_color_input_form');
+    register_setting('email_gate_form_options_group', 'text_color_title_form');
+    register_setting('email_gate_form_options_group', 'bg_color_input_form');
+    register_setting('email_gate_form_options_group', 'bg_color_input_focus_form');
+
+    add_settings_section(
+        'email_gate_form_settings_section',
+        'Paramètres de Style',
+        'email_gate_form_settings_section_callback',
+        'email_gate_form_settings'
+    );
+
+    add_settings_field(
+        'title_form',
+        'Titre du formulaire',
+        'title_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'bg_btn_form',
+        'Couleur de fond du bouton',
+        'bg_btn_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'bg_btn_hover_form',
+        'Couleur de fond du bouton au survol',
+        'bg_btn_hover_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'border_radius_form',
+        'Border radius du formulaire',
+        'border_radius_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'text_color_input_form',
+        'Couleur du texte saisie',
+        'text_color_input_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'text_color_title_form',
+        'Couleur du titre',
+        'text_color_title_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'bg_color_input_form',
+        'Couleur du fond du champ',
+        'bg_color_input_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+
+    add_settings_field(
+        'bg_color_input_focus_form',
+        'Couleur du fond du champ focus',
+        'bg_color_input_focus_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
+    );
+}
+add_action('admin_init', 'email_gate_settings_init');
+
+// Callbacks pour les sections et champs
+function email_gate_form_settings_section_callback() {
+echo 'Modifiez les styles de votre formulaire ici.';
+}
+
+function title_form_render() {
+$value = get_option('title_form', 'Veuillez entrer votre adresse email pour accéder au site');
+    echo '<input type="text" name="title_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function bg_btn_form_render() {
+    $value = get_option('bg_btn_form', '#aba194');
+    echo '<input type="color" name="bg_btn_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function bg_btn_hover_form_render() {
+    $value = get_option('bg_btn_hover_form', '#a09486');
+    echo '<input type="color" name="bg_btn_hover_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function border_radius_form_render() {
+$value = get_option('border_radius_form', '6px');
+echo '<input type="text" name="border_radius_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function text_color_input_form_render() {
+    $value = get_option('text_color_input_form', '#000000');
+    echo '<input type="color" name="text_color_input_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function text_color_title_form_render() {
+    $value = get_option('text_color_title_form', '#ffffff');
+    echo '<input type="color" name="text_color_title_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function bg_color_input_form_render() {
+    $value = get_option('bg_color_input_form', '#ffffff');
+    echo '<input type="color" name="bg_color_input_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
+function bg_color_input_focus_form_render() {
+    $value = get_option('bg_color_input_focus_form', '#f7f7f7');
+    echo '<input type="color" name="bg_color_input_focus_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
+}
+
 ?>

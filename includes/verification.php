@@ -9,7 +9,7 @@ if (!function_exists('email_gate_start_session')) {
     add_action('init', 'email_gate_start_session');
 }
 
-// Rediriger les utilisateurs non autorisés vers le formulaire d'inscription
+// Rediriger les utilisateurs non autorisés vers le formulaire
 if (!function_exists('email_gate_redirect')) {
     function email_gate_redirect() {
         if (!isset($_SESSION['email_gate_email'])) {
