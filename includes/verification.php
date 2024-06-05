@@ -12,6 +12,12 @@ if (!function_exists('email_gate_start_session')) {
 // Rediriger les utilisateurs non autorisés vers le formulaire
 if (!function_exists('email_gate_redirect')) {
     function email_gate_redirect() {
+        // Vérifier si l'utilisateur est connecté
+        if (is_user_logged_in()) {
+            return; // L'utilisateur est connecté, ne pas rediriger
+        }
+
+        // Vérifier si l'email est déjà dans la session
         if (!isset($_SESSION['email_gate_email'])) {
             // Charger et afficher le formulaire
             include plugin_dir_path(__FILE__) . 'form.php';
