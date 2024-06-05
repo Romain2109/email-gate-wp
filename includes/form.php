@@ -66,6 +66,11 @@ if (!function_exists('email_gate_form')) {
             font-weight: 500;
             color: ' . $text_color_title_form . ';
        }
+
+       img{
+            width: 15vh;
+            height: auto;
+        }
         .form {
             margin-top: 40px;
             border-radius: ' . $border_radius_form . ';
@@ -154,7 +159,7 @@ if (!function_exists('email_gate_form')) {
 
         echo '<div class="user">';
         echo '<header class="user__header">';
-        echo '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3219/logo.svg" alt="" />';
+        echo '<img src="' . esc_url(wp_get_attachment_url(get_option('logo_form'))) . '" alt="" />';
         echo '<h1 class="user__title">' . $title_form . '</h1>';
         echo '</header>';
     

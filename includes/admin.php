@@ -178,6 +178,7 @@ add_action('admin_menu', 'email_gate_add_admin_page');
 // Enregistrer les paramètres de style du formulaire
 function email_gate_settings_init() {
     // Section et champs pour la page des options de formulaire
+    register_setting('email_gate_form_options_group', 'logo_form');
     register_setting('email_gate_form_options_group', 'title_form');
     register_setting('email_gate_form_options_group', 'bg_btn_form');
     register_setting('email_gate_form_options_group', 'bg_btn_hover_form');
@@ -197,6 +198,14 @@ function email_gate_settings_init() {
         'Paramètres de Style',
         'email_gate_form_settings_section_callback',
         'email_gate_form_settings'
+    );
+
+    add_settings_field(
+        'logo_form',
+        'Logo du formulaire',
+        'logo_form_render',
+        'email_gate_form_settings',
+        'email_gate_form_settings_section'
     );
     
     add_settings_field(
@@ -311,6 +320,19 @@ function email_gate_form_settings_section_callback() {
 echo 'Modifiez les styles de votre formulaire ici.';
 }
 
+function logo_form_render() {
+    $logo_id = get_option('logo_form');
+    echo '<input type="hidden" id="logo-id" name="logo_form" value="' . esc_attr($logo_id) . '">';
+    echo '<div id="logo-preview" class="logo-preview">';
+    if ($logo_id) {
+        echo '<img src="' . esc_url(wp_get_attachment_url($logo_id)) . '" alt="Logo">';
+    } else {
+        echo 'Aucun logo sélectionné';
+    }
+    echo '</div>';
+    echo '<button id="upload-logo-button" class="button">Sélectionner un logo</button>';
+}
+
 function color1_gradient_form_render() {
     $value = get_option('color1_gradient_form', '#49d49d');
     echo '<input type="color" name="color1_gradient_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
@@ -322,7 +344,7 @@ function color2_gradient_form_render() {
 }
 
 function title_form_render() {
-$value = get_option('title_form', 'Veuillez entrer votre adresse email pour accéder au site');
+$value = get_option('title_form', 'Veuillez entrer votre adresse email');
     echo '<input type="text" name="title_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
 }
 
@@ -375,5 +397,12 @@ function bg_color_input_focus_form_render() {
     $value = get_option('bg_color_input_focus_form', '#f7f7f7');
     echo '<input type="color" name="bg_color_input_focus_form" value="' . esc_attr($value) . '" class="regular-text ltr">';
 }
+
+function email_gate_admin_scripts() {
+    wp_enqueue_media();
+    wp_enqueue_script('email-gate-admin-script', plugin_dir_url(__FILE__) . 'admin.js', array('jquery'), null, true);
+}
+add_action('admin_enqueue_scripts', 'email_gate_admin_scripts');
+
 
 ?>
