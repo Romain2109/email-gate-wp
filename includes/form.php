@@ -34,6 +34,7 @@ if (!function_exists('email_gate_form')) {
         // Afficher le formulaire d'inscription avec CSS inclus
         echo '
         <style>
+        
         * {
             margin: 0;
             padding: 0;
@@ -153,7 +154,19 @@ if (!function_exists('email_gate_form')) {
                 background-position: 0 0;
            }
        }
-        
+
+       /* Media Queries for Responsiveness */
+       @media (max-width: 768px) {
+           .user {
+               width: 80%;
+           }
+       
+           .form__input,
+           .btn {
+               padding: 15px;
+           }
+       }
+       
         </style>
         ';
 

@@ -82,11 +82,31 @@ function email_list_admin_page() {
         }
         ?>
         <form method="post" enctype="multipart/form-data">
+        <style>
+        .wp-list-table th,
+        .wp-list-table td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .column-select,
+        .column-id {
+            width: 1%; /* Force the column to fit the content */
+            white-space: nowrap; /* Prevents content from wrapping */
+        }
+
+        .wp-list-table {
+            width: 100%; /* Ensure the table takes full width */
+            table-layout: auto; /* Use default table layout */
+        }
+        </style>
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
-                        <th style="width: 10%;">Sélectionner</th>
-                        <th style="width: 10%;">ID</th>
+                        <th class="column-select">
+                            <input type="checkbox" id="select-all" style="margin: 0;">
+                        </th>
+                        <th class="column-id">ID</th>
                         <th>Email</th>
                     </tr>
                 </thead>
@@ -95,8 +115,8 @@ function email_list_admin_page() {
                     $emails = get_allowed_emails_with_ids();
                     foreach ($emails as $email) {
                         echo '<tr>';
-                        echo '<td><input type="checkbox" name="selected_emails[]" value="' . esc_attr($email['id']) . '"></td>';
-                        echo '<td>' . esc_html($email['id']) . '</td>';
+                        echo '<td class="column-select"><input type="checkbox" name="selected_emails[]" value="' . esc_attr($email['id']) . '"></td>';
+                        echo '<td class="column-id">' . esc_html($email['id']) . '</td>';
                         echo '<td>' . esc_html($email['email']) . '</td>';
                         echo '</tr>';
                     }
@@ -118,6 +138,15 @@ function email_list_admin_page() {
             <input type="file" name="csv_file" accept=".csv" required>
             <input type="submit" name="import_csv" value="Importer" class="button-primary">
         </form>
+        <script type="text/javascript">
+            document.getElementById('select-all').onclick = function() {
+            var checkboxes = document.getElementsByName('selected_emails[]');
+            for (var checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+                }
+            }
+        </script>
+
     </div>
     <?php
 }
@@ -325,7 +354,7 @@ function logo_form_render() {
     echo '<input type="hidden" id="logo-id" name="logo_form" value="' . esc_attr($logo_id) . '">';
     echo '<div id="logo-preview" class="logo-preview">';
     if ($logo_id) {
-        echo '<img src="' . esc_url(wp_get_attachment_url($logo_id)) . '" alt="Logo">';
+        echo '<img src="' . esc_url(wp_get_attachment_url($logo_id)) . '" alt="Logo" style="width: 15vh; height: auto;" >';
     } else {
         echo 'Aucun logo sélectionné';
     }
