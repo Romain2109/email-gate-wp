@@ -21,8 +21,8 @@ if (!function_exists('email_gate_redirect')) {
         if (!isset($_SESSION['email_gate_email'])) {
             // Charger et afficher le formulaire
             include plugin_dir_path(__FILE__) . 'form.php';
-            email_gate_form();
-            exit;
+            email_gate_form(); // Appel à la fonction qui affiche le formulaire
+            exit; // Terminer le script pour ne pas afficher le reste de la page
         }
     }
     add_action('template_redirect', 'email_gate_redirect');
